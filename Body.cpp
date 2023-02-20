@@ -1,23 +1,36 @@
 #include "Body.h"
 
 
+//Body::Body()
+//{
+//	this->lossOfEnergy = 0.0;
+//	this->friction = 0.0;
+//	this->mass = 0.0;
+//	this->velocityMin = 0.15;
+//	this->isRigid = false;
+//	this->isOnGround = false;
+//	this->gravityForce = 0.0;
+//}
+
 Body::Body()
+	: isRigid(false), gravityForce(0.0), mass(1.0), lossOfEnergy(1.0), friction(1.0), velocity(0.0, 0.0)
 {
-	this->lossOfEnergy = 0.0;
-	this->friction = 0.0;
-	this->mass = 0.0;
 	this->velocityMin = 0.15;
-	this->isRigid = false;
 	this->isOnGround = false;
-	this->gravityForce = 0.0;
 }
 
-//Body::Body(bool _isRigid = false, double _gravityForce = 0.0, double _mass = 1, double _lossOfEnergy = 1.0, double _friction = 1, double _velocityX = 0, double _velocityY = 0)
-//	: isRigid(_isRigid), gravityForce(_gravityForce), mass(_mass), lossOfEnergy(_lossOfEnergy), friction(_friction), velocity(_velocityX, _velocityY)
-//{
-//	this->velocityMin = 0.15;
-//	this->isOnGround = false;
-//}
+Body::Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY)
+{
+	this->isRigid = _isRigid;
+	this->gravityForce = _gravityForce;
+	this->mass = _mass;
+	this->lossOfEnergy = _lossOfEnergy;
+	this->friction = _friction;
+	this->velocity = Wektor{ _velocityX, _velocityY };
+
+	this->velocityMin = 0.1;
+	this->isOnGround = false;
+}
 
 Body::~Body()
 {

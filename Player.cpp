@@ -1,9 +1,10 @@
 #include "Player.h"
 
 //Constructors & Destructors
-Player::Player()
+Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY)
+	: Body(_isRigid, _gravityForce, _mass, _lossOfEnergy, _friction, _velocityX, _velocityY)
 {
-	this->shape.setPosition(0.f, 0.f);
+	this->shape.setPosition(posX, posY);
 	this->initVariables();
 	this->initShape();
 }
@@ -16,6 +17,14 @@ Player::Player(float x, float y)
 	this->initShape();
 
 	this->setVelocity(Wektor(10.0, 10.0));
+}
+
+Player::Player()
+	: Body(false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+{
+	this->shape.setPosition(0.f, 0.f);
+	this->initVariables();
+	this->initShape();
 }
 
 Player::~Player()

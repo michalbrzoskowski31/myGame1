@@ -17,9 +17,9 @@ public:
 	// constructors & destructors
 	Body();
 	//Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY)
-	//	: isRigid(_isRigid), gravityForce(_gravityForce), mass(_mass), lossOfEnergy(_lossOfEnergy), friction(_friction), velocity(_velocityX, _velocityY){
-	//}
-;
+	//	: isRigid(_isRigid), gravityForce(_gravityForce), mass(_mass), lossOfEnergy(_lossOfEnergy), friction(_friction), velocity(_velocityX, _velocityY);
+	
+	Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY);
 	~Body();
 
 	// Update

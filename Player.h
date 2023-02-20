@@ -12,7 +12,8 @@ class Player : public Body
 {
 public:
 	//Constructors & Destructors
-	Player(float x, float y);
+	Player(float posX, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY);
+	Player(float posX, float posY);
 	Player();
 	virtual ~Player();
 

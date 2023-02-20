@@ -29,7 +29,7 @@ private:
 	sf::RenderWindow* window;
 	sf::Event sfmlEvent;
 
-	Player player{};
+	Player player{ 1050.f, 700.f, false, 0.1, 10.0, 0.1, 0.1, 10.0, -5.0 };
 
 
 	void pollEvents();
