@@ -7,6 +7,8 @@
 #include <SFML/Network.hpp>
 
 #include "Player.h"
+#include "Block.h"
+#include "Platform.h"
 
 class Game
 {
@@ -30,6 +32,9 @@ private:
 	sf::Event sfmlEvent;
 
 	Player player{ 1050.f, 700.f, false, 0.1, 10.0, 0.1, 0.1, 10.0, -5.0 };
+	Block block1{ 500.f, 700.f};
+	Platform platform1{ 100, 500, 5, 1};
+
 
 
 	void pollEvents();

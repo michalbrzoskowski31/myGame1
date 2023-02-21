@@ -23,11 +23,16 @@ public:
 	~Body();
 
 	// Update
+		void updatePhysics(sf::Sprite& target);
 		void updatePhysics(sf::Shape& target);
+
 		void updateAcceleration();
 		void updateForce();
 		void updateVelocity();
+
+		void updateMovement(sf::Sprite& target);
 		void updateMovement(sf::Shape& target);
+		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape);
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape);
 	// Setters
 		void setIsRigid(bool _isRigid);

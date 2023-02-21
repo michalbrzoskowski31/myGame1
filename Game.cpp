@@ -28,12 +28,20 @@ bool Game::isRunning() const
 void Game::update()
 {
 	this->pollEvents();
+
+	this->block1.update(this->window);
+	this->platform1.update(this->window);
+
 	this->player.update(this->window);
 }
 
 void Game::render()
 {
 	this->window->clear();
+
+	this->block1.render(this->window);
+	//this->block1.setIsRigid(false);
+	this->platform1.render(this->window);
 
 	this->player.render(this->window);
 

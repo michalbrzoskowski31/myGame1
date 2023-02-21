@@ -37,7 +37,7 @@ Body::~Body()
 }
 
 // Update
-	void Body::updatePhysics(sf::Shape& target)
+	void Body::updatePhysics(sf::Sprite& target)
 	{
 		if (!isRigid)
 		{
@@ -60,6 +60,28 @@ Body::~Body()
 
 	}
 
+	void Body::updatePhysics(sf::Shape& target)
+	{
+		if (!isRigid)
+		{
+			updateAcceleration();
+			updateForce();
+			updateVelocity();
+			updateMovement(target);
+
+			if (isOnGround)
+			{
+				if (fabs(velocity.x) <= velocityMin)
+				{
+					velocity.x = 0;
+				}
+				else
+					velocity.x = velocity.x * friction;
+
+			}
+		}
+	}
+
 	void Body::updateAcceleration()
 	{
 		this->acceleration.y = this->gravityForce;
@@ -75,15 +97,55 @@ Body::~Body()
 		this->velocity = this->velocity + this->acceleration;
 	}
 
+	void Body::updateMovement(sf::Sprite& target)
+	{
+		target.move(static_cast<float>(this->velocity.x), static_cast<float>(this->velocity.y));
+	}
+
 	void Body::updateMovement(sf::Shape& target)
 	{
 		target.move(static_cast<float>(this->velocity.x), static_cast<float>(this->velocity.y));
 	}
 
-	void Body::updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape)
+	void Body::updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape)
 	{
 		// Left
 		//sf::FloatRect this->shape.getGlobalBounds() = this->shape.getGlobalBounds();
+
+		if (shape.getGlobalBounds().left <= 0.f)
+		{
+			shape.setPosition(0.f, shape.getGlobalBounds().top);
+			velocity.x = -velocity.x * lossOfEnergy;
+		}
+		// Right
+		if (shape.getGlobalBounds().left + shape.getGlobalBounds().width >= target->getSize().x)
+		{
+			shape.setPosition(target->getSize().x - shape.getGlobalBounds().width, shape.getGlobalBounds().top);
+			velocity.x = -velocity.x * lossOfEnergy;
+		}
+		// Top
+		if (shape.getGlobalBounds().top <= 0.f)
+		{
+			shape.setPosition(shape.getGlobalBounds().left, 0.f);
+			velocity.y = -velocity.y * lossOfEnergy;
+		}
+		// Bottom
+		if (shape.getGlobalBounds().top + shape.getGlobalBounds().height >= target->getSize().y)
+		{
+			shape.setPosition(shape.getGlobalBounds().left, target->getSize().y - shape.getGlobalBounds().height);
+			isOnGround = true;
+			velocity.y = -velocity.y * lossOfEnergy;
+
+			//velocity.x = 0;
+			//velocity.y = 0;
+
+		}
+	}
+
+	void Body::updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape)
+	{
+		// Left
+//sf::FloatRect this->shape.getGlobalBounds() = this->shape.getGlobalBounds();
 
 		if (shape.getGlobalBounds().left <= 0.f)
 		{
