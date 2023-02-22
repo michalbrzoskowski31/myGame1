@@ -11,10 +11,10 @@
 #include "Block.h"
 
 
-class Platform
+class Platform : public Block
 {
 public:
-	Platform(float positionX, float positionY, short width, short height);
+	Platform(float positionX, float positionY, short width, short height, sf::Texture* texture);
 	~Platform();
 
 	std::vector<Block> platform;

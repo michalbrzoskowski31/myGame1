@@ -1,12 +1,16 @@
 #include "Platform.h"
 
-Platform::Platform(float positionX, float positionY, short width, short height)
+Platform::Platform(float positionX, float positionY, short width, short height, sf::Texture* texture)
 {
 	//initBlocksTextures();
-	this->blockDefault.loadFromFile("C:\\Users\\Micha\\Desktop\\Programowanie\\C++\\myGame1\\Textures\\block_ground.png");
-	for (size_t i = 0; i < width; i++)
+	//this->blockDefault.loadFromFile("Textures/block_ground.png");
+	for (size_t w = 0; w < width; w++)
 	{
-		platform.push_back(Block{ positionX + i * grid, positionY , &blockDefault});
+		for (size_t h = 0; h < height; h++)
+		{
+			platform.push_back(Block{ positionX + w * grid, positionY + h * grid, texture});
+
+		}
 	}
 }
 
@@ -17,17 +21,20 @@ Platform::~Platform()
 
 void Platform::update(const sf::RenderTarget* target)
 {
-	for (size_t i = 0; i < 5; i++)
+	for (auto& block : platform)
 	{
-		this->platform.at(i).updatePhysics(this->platform.at(i).shape);
-		this->platform.at(i).updateWindowBoundsCollision(target, this->platform.at(i).shape);
+		//this->platform.at(i).updatePhysics(this->platform.at(i).shape);
+		//this->platform.at(i).updateWindowBoundsCollision(target, this->platform.at(i).shape);
+		block.updatePhysics(block.shape);
+		block.updateWindowBoundsCollision(target, block.shape);
 	}
 }
 
 void Platform::render(sf::RenderTarget* target)
 {
-	for (size_t i = 0; i < platform.size(); i++)
+	for (auto& block : platform)
 	{
-		target->draw(platform.at(i).shape);
+		//target->draw(platform.at(block).shape);
+		target->draw(block.shape);
 	}
 }

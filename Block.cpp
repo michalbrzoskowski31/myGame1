@@ -1,7 +1,7 @@
 #include "Block.h"
 
 Block::Block(float positionX, float positionY, sf::Texture* texture)
-	: Body(false, 0.1, 10.0, 0.1, 0.1, 0.0, 0.0)
+	: Body(true, 0.1, 10.0, 0.1, 0.1, 0.0, 0.0)
 {
 	this->shape.setPosition(sf::Vector2f(positionX, positionY));
 	this->shape.setTexture(*texture);
