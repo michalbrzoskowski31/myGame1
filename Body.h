@@ -34,6 +34,8 @@ public:
 		void updateMovement(sf::Shape& target);
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape);
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape);
+
+		void updateNextPosition(sf::FloatRect currentPos);
 	// Setters
 		void setIsRigid(bool _isRigid);
 		void setIsOnGround(bool _isOnGround);
@@ -70,6 +72,7 @@ public:
 		Y,
 	};
 
+	sf::FloatRect nextPos;
 
 	bool isRigid;
 	bool isOnGround;

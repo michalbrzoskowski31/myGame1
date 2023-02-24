@@ -45,6 +45,7 @@ Body::~Body()
 			updateForce();
 			updateVelocity();
 			updateMovement(target);
+			updateNextPosition(target.getGlobalBounds());
 
 			if (isOnGround)
 			{
@@ -68,6 +69,7 @@ Body::~Body()
 			updateForce();
 			updateVelocity();
 			updateMovement(target);
+			updateNextPosition(target.getGlobalBounds());
 
 			if (isOnGround)
 			{
@@ -175,6 +177,13 @@ Body::~Body()
 			//velocity.y = 0;
 
 		}
+	}
+
+	void Body::updateNextPosition(sf::FloatRect currentPos)
+	{
+		this->nextPos = currentPos;
+		this->nextPos.left += velocity.x;
+		this->nextPos.top += velocity.y;
 	}
 
 // Setters

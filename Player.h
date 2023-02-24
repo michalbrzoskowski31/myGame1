@@ -24,14 +24,14 @@ public:
 	//void updateWindowBoundsCollision(const sf::RenderTarget* target);
 
 	// Getters
-	double getVelocity(short xy) const;
-	double getAcceleration(short xy) const;
-	double getMovement(short xy) const;
-	double getForce(short xy) const;
+	//double getVelocity(short xy) const;
+	//double getAcceleration(short xy) const;
+	//double getMovement(short xy) const;
+	//double getForce(short xy) const;
 
+	sf::RectangleShape shape;
 private:
 	double movementSpeed;
-	sf::RectangleShape shape;
 	void initVariables();
 	void initShape();
 	void initPhysicalParameters(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY);

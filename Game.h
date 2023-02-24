@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -30,6 +31,8 @@ public:
 	// Public functions
 		void update();
 		void render();
+
+		void updateCollision();
 
 
 		//Platform* platform1_ptr;

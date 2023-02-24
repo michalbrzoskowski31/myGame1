@@ -35,7 +35,7 @@ Player::~Player()
 
 void Player::initVariables()
 {
-	this->movementSpeed = 5.0;
+	this->movementSpeed = 3.0;
 }
 
 void Player::initShape()
@@ -115,22 +115,22 @@ void Player::render(sf::RenderTarget* target)
 	target->draw(this->shape);
 }
 
-double Player::getAcceleration(short xy) const
-{
-	return xy == 0 ? this->acceleration.x : this->acceleration.y;
-}
-
-double Player::getVelocity(short xy) const
-{
-	return xy == 0 ? this->velocity.x : this->velocity.y;
-}
-
-double Player::getForce(short xy) const
-{
-	return xy == 0 ? this->force.x : this->force.y;
-}
-
-double Player::getMovement(short xy) const
-{
-	return xy == 0 ? this->movement.x : this->movement.y;
-}
+//double Player::getAcceleration(short xy) const
+//{
+//	return xy == 0 ? this->acceleration.x : this->acceleration.y;
+//}
+//
+//double Player::getVelocity(short xy) const
+//{
+//	return xy == 0 ? this->velocity.x : this->velocity.y;
+//}
+//
+//double Player::getForce(short xy) const
+//{
+//	return xy == 0 ? this->force.x : this->force.y;
+//}
+//
+//double Player::getMovement(short xy) const
+//{
+//	return xy == 0 ? this->movement.x : this->movement.y;
+//}
