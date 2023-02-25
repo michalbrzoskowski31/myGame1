@@ -68,54 +68,19 @@ void Game::update()
 	for (auto& ball : balls)
 	{
 		ball.update(this->window);
+		//ball.updateCollision(ball.shape.getGlobalBounds(), )
+		//ball.setVelocity(Wektor{ 5.0, 5.0 });
 	}
 	for(auto& platformT : platforms)
 	{
 		platformT.update(this->window);
 		for (auto& block : platformT.platform)
 		{
-
-			sf::FloatRect playerBounds = player->shape.getGlobalBounds();
-			sf::FloatRect blockBounds = block.shape.getGlobalBounds();
-
-
-			if (blockBounds.intersects(player->nextPos))
+			player->updateCollision(player->shape.getGlobalBounds(), block.shape.getGlobalBounds(), *player, player->shape);
+			for (auto& ball : balls)
 			{
-				//std::cout << "COLLISION!\n";
-				if (playerBounds.left < blockBounds.left
-					&& playerBounds.left + playerBounds.width < blockBounds.left + blockBounds.width
-					&& playerBounds.top < blockBounds.top + blockBounds.height
-					&& playerBounds.top + playerBounds.height > blockBounds.top) // Right collision
-				{
-					player->setVelocity(Wektor{ 0, player->getVelocity().y });
-					player->shape.setPosition(blockBounds.left - playerBounds.width, playerBounds.top);
-				}
-				else if (playerBounds.left > blockBounds.left
-					&& playerBounds.left + playerBounds.width > blockBounds.left + blockBounds.width
-					&& playerBounds.top < blockBounds.top + blockBounds.height
-					&& playerBounds.top + playerBounds.height > blockBounds.top) // Left collision
-				{
-					player->setVelocity(Wektor{ 0, player->getVelocity().y });
-					player->shape.setPosition(blockBounds.left + blockBounds.width, playerBounds.top);
-				}
-				if (playerBounds.top < blockBounds.top
-					&& playerBounds.top + playerBounds.height < blockBounds.top + blockBounds.height
-					&& playerBounds.left < blockBounds.left + blockBounds.width
-					&& playerBounds.left + playerBounds.width > blockBounds.left) // Bottom collision
-				{
-					player->setIsOnGround(true);
-					player->setVelocity(Wektor{ player->getVelocity().x, 0 });
-					player->shape.setPosition(playerBounds.left,  blockBounds.top - playerBounds.height);
-				}
-				else if (playerBounds.top > blockBounds.top
-					&& playerBounds.top + playerBounds.height > blockBounds.top + blockBounds.height
-					&& playerBounds.left < blockBounds.left + blockBounds.width
-					&& playerBounds.left + playerBounds.width > blockBounds.left) // Top collision
-				{
-					player->setVelocity(Wektor{ player->getVelocity().x, 0 });
-					player->shape.setPosition(playerBounds.left, blockBounds.top + blockBounds.height);
-				}
 				
+				ball.updateCollision(ball.shape.getGlobalBounds(), block.shape.getGlobalBounds(), ball, ball.shape);
 			}
 		}
 

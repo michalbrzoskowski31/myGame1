@@ -71,6 +71,7 @@ Body::~Body()
 			updateMovement(target);
 			updateNextPosition(target.getGlobalBounds());
 
+
 			if (isOnGround)
 			{
 				if (fabs(velocity.x) <= velocityMin)
@@ -179,8 +180,46 @@ Body::~Body()
 		}
 	}
 
-	void Body::updateCollision(const sf::RenderTarget* target, sf::FloatRect body1, sf::FloatRect body2)
+	void Body::updateCollision(const sf::FloatRect& bodyBounds1, const sf::FloatRect& bodyBounds2, Body& body, sf::Sprite& shape)
 	{
+		if (bodyBounds2.intersects(body.nextPos))
+		{
+			//std::cout << "COLLISION!\n";
+			if (bodyBounds1.left < bodyBounds2.left
+				&& bodyBounds1.left + bodyBounds1.width < bodyBounds2.left + bodyBounds2.width
+				&& bodyBounds1.top < bodyBounds2.top + bodyBounds2.height
+				&& bodyBounds1.top + bodyBounds1.height > bodyBounds2.top) // Right collision
+			{
+				body.setVelocity(Wektor{ 0, body.getVelocity().y });
+				shape.setPosition(bodyBounds2.left - bodyBounds1.width, bodyBounds1.top);
+			}
+			else if (bodyBounds1.left > bodyBounds2.left
+				&& bodyBounds1.left + bodyBounds1.width > bodyBounds2.left + bodyBounds2.width
+				&& bodyBounds1.top < bodyBounds2.top + bodyBounds2.height
+				&& bodyBounds1.top + bodyBounds1.height > bodyBounds2.top) // Left collision
+			{
+				body.setVelocity(Wektor{ 0, body.getVelocity().y });
+				shape.setPosition(bodyBounds2.left + bodyBounds2.width, bodyBounds1.top);
+			}
+			if (bodyBounds1.top < bodyBounds2.top
+				&& bodyBounds1.top + bodyBounds1.height < bodyBounds2.top + bodyBounds2.height
+				&& bodyBounds1.left < bodyBounds2.left + bodyBounds2.width
+				&& bodyBounds1.left + bodyBounds1.width > bodyBounds2.left) // Bottom collision
+			{
+				body.setIsOnGround(true);
+				body.setVelocity(Wektor{ body.getVelocity().x, 0 });
+				shape.setPosition(bodyBounds1.left, bodyBounds2.top - bodyBounds1.height);
+			}
+			else if (bodyBounds1.top > bodyBounds2.top
+				&& bodyBounds1.top + bodyBounds1.height > bodyBounds2.top + bodyBounds2.height
+				&& bodyBounds1.left < bodyBounds2.left + bodyBounds2.width
+				&& bodyBounds1.left + bodyBounds1.width > bodyBounds2.left) // Top collision
+			{
+				body.setVelocity(Wektor{ body.getVelocity().x, 0 });
+				shape.setPosition(bodyBounds1.left, bodyBounds2.top + bodyBounds2.height);
+			}
+
+		}
 	}
 
 	void Body::updateNextPosition(sf::FloatRect currentPos)
