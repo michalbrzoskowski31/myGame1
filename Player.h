@@ -12,7 +12,7 @@ class Player : public Body
 {
 public:
 	//Constructors & Destructors
-	Player(float posX, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY);
+	Player(float posX, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY, sf::Texture* texture);
 	Player(float posX, float posY);
 	Player();
 	virtual ~Player();
@@ -21,6 +21,7 @@ public:
 	void update(const sf::RenderTarget* target);
 	void updateInput();
 	void render(sf::RenderTarget* target);
+
 	//void updateWindowBoundsCollision(const sf::RenderTarget* target);
 
 	// Getters
@@ -29,11 +30,11 @@ public:
 	//double getMovement(short xy) const;
 	//double getForce(short xy) const;
 
-	sf::RectangleShape shape;
+	sf::Sprite shape;
 private:
 	double movementSpeed;
 	void initVariables();
-	void initShape();
+	//void initShape();
 	void initPhysicalParameters(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY);
 };
 

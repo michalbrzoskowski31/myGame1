@@ -1,12 +1,14 @@
 #include "Player.h"
 
 //Constructors & Destructors
-Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY)
+Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY, sf::Texture* texture)
 	: Body(_isRigid, _gravityForce, _mass, _lossOfEnergy, _friction, _velocityX, _velocityY)
 {
+	
 	this->shape.setPosition(posX, posY);
 	this->initVariables();
-	this->initShape();
+	this->shape.setTexture(*texture);
+	//this->initShape();
 }
 
 Player::Player(float x, float y)
@@ -14,7 +16,7 @@ Player::Player(float x, float y)
 	this->shape.setPosition(x, y);
 
 	this->initVariables();
-	this->initShape();
+	//this->initShape();
 
 	this->setVelocity(Wektor(10.0, 10.0));
 }
@@ -24,7 +26,7 @@ Player::Player()
 {
 	this->shape.setPosition(0.f, 0.f);
 	this->initVariables();
-	this->initShape();
+	//this->initShape();
 }
 
 Player::~Player()
@@ -38,12 +40,12 @@ void Player::initVariables()
 	this->movementSpeed = 3.0;
 }
 
-void Player::initShape()
-{
-	this->shape.setFillColor(sf::Color::Green);
-	this->shape.setSize(sf::Vector2f(50.f, 50.f));
-
-}
+//void Player::initShape()
+//{
+//	this->shape.setFillColor(sf::Color::Green);
+//	this->shape.setSize(sf::Vector2f(50.f, 50.f));
+//
+//}
 
 void Player::initPhysicalParameters(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY)
 {
@@ -90,13 +92,13 @@ void Player::updateInput()
 	// Up
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-
+		this->velocity.y = -movementSpeed;
 	}
 	// Down
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		if (!PressedS)
-			if (!isOnGround)
+			//if (!isOnGround)
 				this->velocity.y = movementSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))

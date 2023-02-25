@@ -179,6 +179,10 @@ Body::~Body()
 		}
 	}
 
+	void Body::updateCollision(const sf::RenderTarget* target, sf::FloatRect body1, sf::FloatRect body2)
+	{
+	}
+
 	void Body::updateNextPosition(sf::FloatRect currentPos)
 	{
 		this->nextPos = currentPos;

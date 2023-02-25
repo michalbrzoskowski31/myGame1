@@ -35,6 +35,8 @@ public:
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape);
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape);
 
+		void updateCollision(const sf::RenderTarget* target, sf::FloatRect body1, sf::FloatRect body2);
+
 		void updateNextPosition(sf::FloatRect currentPos);
 	// Setters
 		void setIsRigid(bool _isRigid);
