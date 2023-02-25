@@ -36,8 +36,16 @@ public:
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape);
 
 		void updateCollision(const sf::FloatRect& bodyBounds1, const sf::FloatRect& bodyBounds2, Body& body, sf::Sprite& shape);
+		void updateCollidingStates();
 
 		void updateNextPosition(sf::FloatRect currentPos);
+
+	// Bouncing functions
+		void rightCollision();
+		void leftCollision();
+		void topCollision();
+		void bottomCollision();
+
 	// Setters
 		void setIsRigid(bool _isRigid);
 		void setIsOnGround(bool _isOnGround);
@@ -83,6 +91,11 @@ public:
 	double lossOfEnergy;
 	double friction;
 	double velocityMin;
+
+	bool rightColliding;
+	bool leftColliding;
+	bool topColliding;
+	bool bottomColliding;
 
 	Wektor force;
 
