@@ -8,7 +8,6 @@ Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _grav
 	this->shape.setPosition(posX, posY);
 	this->initVariables();
 	this->shape.setTexture(*texture);
-	//this->shape.setScale(0.95, 0.95);
 	//this->initShape();
 }
 
@@ -57,23 +56,26 @@ void Player::initPhysicalParameters(bool _isRigid, double _gravityForce, double 
 
 void Player::update(const sf::RenderTarget* target)
 {
+	this->updateInput();
 
 	this->updatePhysics(this->shape);
 	this->setIsOnGround(false);
 	this->updateWindowBoundsCollision(target, this->shape);
-	this->updateInput();
-
-	//this->updateCollidingStates();
 }
 
 void Player::updateInput()
 {
+	bool PressedW = false;
+	bool PressedS = false;
+	bool PressedA = false;
+	bool PressedD = false;
 	// Keyboard input
 	// Left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		if (!leftColliding)
+		if (!PressedA)
 		{
+			PressedA = true;
 			this->velocity.x = -movementSpeed;
 			//this->setVelocity(Wektor{ -movementSpeed, 0.0 });
 		}
@@ -81,32 +83,29 @@ void Player::updateInput()
 	// Right
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		if (!rightColliding)
+		if (!PressedD)
 		{
+			PressedD = true;
 			this->velocity.x = movementSpeed;
-
 		}
 	}
 	// Up
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		if(!topColliding)
-			this->velocity.y = -movementSpeed;
+		this->velocity.y = -movementSpeed;
 	}
 	// Down
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-
-		if (!bottomColliding)
-			this->velocity.y = movementSpeed;
+		if (!PressedS)
+			//if (!isOnGround)
+				this->velocity.y = movementSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		if (isOnGround)
 			this->velocity.y = this->velocity.y - 7.8;
 	}
-	//rightColliding = false;
-	//leftColliding = false;
 }
 
 

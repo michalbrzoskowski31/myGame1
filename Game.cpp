@@ -7,7 +7,7 @@ Game::Game()
 	this->background_sprite.setTexture(backgroundTexture); // mozna to potem daæ gdzieœ indziej
 	this->initStructures();
 
-	this->player = new Player{ 1050.f, 1040.0, false, 0.1, 10.0, 0.1, 0.1, 0.0, 0.0, &playerTexture };
+	this->player = new Player{ 1050.f, 700.f, false, 0.1, 10.0, 0.1, 0.1, 10.0, -5.0, &playerTexture };
 	this->balls.push_back(Ball{ 100.f, 100.f, 0.1, 10.f, 0.3, 0.f, &ballTexture });
 
 }
@@ -39,16 +39,14 @@ void Game::loadTextures()
 void Game::initStructures()
 {
 	//this->platform1_ptr = new Platform{ 500.f, 300.f, 7, 2, &blockGrass };
-	//this->platforms.push_back(Platform{ 0.f, 1030.f, 15, 1, &blockGrassTexture });
-	//this->platforms.push_back(Platform{ 1700.f, 500.f, 3, 5, &blockDefaultTexture });
-	//this->platforms.push_back(Platform{ 500.f, 900.f, 5, 1, &blockDefaultTexture });
+	this->platforms.push_back(Platform{ 0.f, 1030.f, 15, 1, &blockGrassTexture });
+	this->platforms.push_back(Platform{ 1700.f, 500.f, 3, 5, &blockDefaultTexture });
+	this->platforms.push_back(Platform{ 500.f, 900.f, 5, 1, &blockDefaultTexture });
 	this->platforms.push_back(Platform{ 1000.f, 700.f, 7, 2, &blockGrassTexture });
-	this->platforms.push_back(Platform{ 1570.f, 580.f, 1, 10, &playerTexture });
-	//this->platforms.push_back(Platform{ 200.f, 200.f, 1, 1, &playerTexture });
 
-	//this->platforms.at(2).platform.at(2).setIsRigid(false);
-	//this->platforms.at(2).platform.at(2).setLossOfEnergy(1.01);
-	//this->platforms.at(2).platform.at(2).setFriction(1.01);
+	this->platforms.at(2).platform.at(2).setIsRigid(false);
+	this->platforms.at(2).platform.at(2).setLossOfEnergy(1.01);
+	this->platforms.at(2).platform.at(2).setFriction(1.01);
 }
 
 bool Game::isRunning() const
@@ -59,7 +57,6 @@ bool Game::isRunning() const
 void Game::update()
 {
 	this->pollEvents();
-	//this->player->updateCollidingStates();
 
 	//this->block1.update(this->window);
 
@@ -70,7 +67,7 @@ void Game::update()
 	*/
 	for (auto& ball : balls)
 	{
-		//ball.update(this->window);
+		ball.update(this->window);
 		//ball.updateCollision(ball.shape.getGlobalBounds(), )
 		//ball.setVelocity(Wektor{ 5.0, 5.0 });
 	}
@@ -79,20 +76,17 @@ void Game::update()
 		platformT.update(this->window);
 		for (auto& block : platformT.platform)
 		{
-
 			player->updateCollision(player->shape.getGlobalBounds(), block.shape.getGlobalBounds(), *player, player->shape);
-			//this->player->updateCollidingStates();
-			
 			for (auto& ball : balls)
 			{
 				
-				//ball.updateCollision(ball.shape.getGlobalBounds(), block.shape.getGlobalBounds(), ball, ball.shape);
+				ball.updateCollision(ball.shape.getGlobalBounds(), block.shape.getGlobalBounds(), ball, ball.shape);
 			}
 		}
 
 	}
-	this->player->update(this->window);
 
+	this->player->update(this->window);
 }
 
 void Game::updateCollision()
