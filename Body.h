@@ -37,6 +37,11 @@ public:
 
 		void updateCollision(const sf::FloatRect& bodyBounds1, const sf::FloatRect& bodyBounds2, Body& body, sf::Sprite& shape);
 
+		void rightCollision();
+		void leftCollision();
+		void topCollision();
+		void bottomCollision();
+
 		void updateNextPosition(sf::FloatRect currentPos);
 	// Setters
 		void setIsRigid(bool _isRigid);

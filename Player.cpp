@@ -1,13 +1,16 @@
 #include "Player.h"
 
 //Constructors & Destructors
-Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY, sf::Texture* texture)
+Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY, sf::Texture* playerTexture, sf::Texture* gunTexture)
 	: Body(_isRigid, _gravityForce, _mass, _lossOfEnergy, _friction, _velocityX, _velocityY)
 {
 	
 	this->shape.setPosition(posX, posY);
 	this->initVariables();
-	this->shape.setTexture(*texture);
+	this->shape.setTexture(*playerTexture);
+	this->gun.setTexture(*gunTexture);
+	this->gun.setScale(0.25, 0.25);
+	this->gun.setOrigin(232, 0);
 	//this->initShape();
 }
 
@@ -54,13 +57,15 @@ void Player::initPhysicalParameters(bool _isRigid, double _gravityForce, double 
 
 // Public functions
 
-void Player::update(const sf::RenderTarget* target)
+void Player::update(const sf::RenderTarget* target, const sf::Window& window)
 {
-	this->updateInput();
 
+	this->updateInput();
 	this->updatePhysics(this->shape);
 	this->setIsOnGround(false);
 	this->updateWindowBoundsCollision(target, this->shape);
+	this->updateGun(window, target);
+	
 }
 
 void Player::updateInput()
@@ -69,11 +74,13 @@ void Player::updateInput()
 	bool PressedS = false;
 	bool PressedA = false;
 	bool PressedD = false;
+
+
 	// Keyboard input
 	// Left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		if (!PressedA)
+		if (1)
 		{
 			PressedA = true;
 			this->velocity.x = -movementSpeed;
@@ -83,7 +90,7 @@ void Player::updateInput()
 	// Right
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		if (!PressedD)
+		if (1)
 		{
 			PressedD = true;
 			this->velocity.x = movementSpeed;
@@ -108,6 +115,38 @@ void Player::updateInput()
 	}
 }
 
+void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target)
+{
+	this->gun.setPosition(this->shape.getPosition().x, this->shape.getPosition().y);
+	this->mousePosition = sf::Mouse::getPosition(window);
+	this->mousePosView = target->mapPixelToCoords(this->mousePosition);
+	sf::Vector2f point1;
+	point1.x = (shape.getPosition().x - (window.getSize().x / 2));
+	point1.y = (window.getSize().y) / 2 - shape.getPosition().y;
+
+	sf::Vector2f point2;
+	point2.x = (mousePosView.x - (window.getSize().x / 2));
+	point2.y = (window.getSize().y) / 2 - mousePosView.y;
+
+	float b = atan2f(point1.x - point2.x, point1.y - point2.y) * 180 / 3.141592653 -90;
+	if (mousePosition.x > shape.getPosition().x)
+	{
+		this->gun.setScale(0.25, -0.25);
+		//this->gun.setRotation(b);
+	}
+	else
+	{
+		this->gun.setScale(0.25, 0.25);
+	}
+	this->gun.setRotation(b);
+	std::cout << b << "\n";
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		//balls.push_back(Ball{ shape.getPosition().x, shape.getPosition().y, 0.1, 10, 0.2, 0.2, &texture});
+	}
+}
+
 
 
 void Player::render(sf::RenderTarget* target)
@@ -115,6 +154,7 @@ void Player::render(sf::RenderTarget* target)
 
 
 	target->draw(this->shape);
+	target->draw(this->gun);
 }
 
 //double Player::getAcceleration(short xy) const

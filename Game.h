@@ -52,6 +52,7 @@ private:
 
 	sf::Texture playerTexture;
 	sf::Texture ballTexture;
+	sf::Texture gunTexture;
 
 	sf::Sprite background_sprite;
 

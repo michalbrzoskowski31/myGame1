@@ -7,7 +7,7 @@ Game::Game()
 	this->background_sprite.setTexture(backgroundTexture); // mozna to potem daæ gdzieœ indziej
 	this->initStructures();
 
-	this->player = new Player{ 1050.f, 700.f, false, 0.1, 10.0, 0.1, 0.1, 10.0, -5.0, &playerTexture };
+	this->player = new Player{ 1050.f, 700.f, false, 0.1, 10.0, 0.1, 0.1, 10.0, -5.0, &playerTexture, &gunTexture};
 	this->balls.push_back(Ball{ 100.f, 100.f, 0.1, 10.f, 0.3, 0.f, &ballTexture });
 
 }
@@ -34,6 +34,7 @@ void Game::loadTextures()
 	this->backgroundTexture.loadFromFile("Textures/background.png");
 	this->playerTexture.loadFromFile("Textures/player.png");
 	this->ballTexture.loadFromFile("Textures/ball.png");
+	this->gunTexture.loadFromFile("Textures/gun.png");
 }
 
 void Game::initStructures()
@@ -42,7 +43,7 @@ void Game::initStructures()
 	this->platforms.push_back(Platform{ 0.f, 1030.f, 15, 1, &blockGrassTexture });
 	this->platforms.push_back(Platform{ 1700.f, 500.f, 3, 5, &blockDefaultTexture });
 	this->platforms.push_back(Platform{ 500.f, 900.f, 5, 1, &blockDefaultTexture });
-	this->platforms.push_back(Platform{ 1000.f, 700.f, 7, 2, &blockGrassTexture });
+	this->platforms.push_back(Platform{ 1000.f, 700.f, 1, 7, &blockGrassTexture });
 
 	this->platforms.at(2).platform.at(2).setIsRigid(false);
 	this->platforms.at(2).platform.at(2).setLossOfEnergy(1.01);
@@ -86,7 +87,8 @@ void Game::update()
 
 	}
 
-	this->player->update(this->window);
+	this->player->update(this->window, *this->window);
+
 }
 
 void Game::updateCollision()
