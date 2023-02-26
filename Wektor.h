@@ -19,8 +19,8 @@ public:
 	//Wektor operator%(Wektor const& w);
 
 
-	double dlugosc();
-	void normoj();
+	double length();
+	void normalize();
 };
 
 Wektor operator*(double s, Wektor const& w);

@@ -8,7 +8,7 @@ Game::Game()
 	this->initStructures();
 
 	this->player = new Player{ 1050.f, 700.f, false, 0.1, 10.0, 0.1, 0.1, 10.0, -5.0, &playerTexture, &gunTexture};
-	this->balls.push_back(Ball{ 100.f, 100.f, 0.1, 10.f, 0.3, 0.f, &ballTexture });
+	//this->balls.push_back(Ball{ 100.f, 100.f, 0.1, 10.f, 0.3, 0.f, &ballTexture });
 
 }
 
@@ -46,8 +46,8 @@ void Game::initStructures()
 	this->platforms.push_back(Platform{ 1000.f, 700.f, 1, 7, &blockGrassTexture });
 
 	this->platforms.at(2).platform.at(2).setIsRigid(false);
-	this->platforms.at(2).platform.at(2).setLossOfEnergy(1.01);
-	this->platforms.at(2).platform.at(2).setFriction(1.01);
+	this->platforms.at(2).platform.at(2).setLossOfEnergy(1.0);
+	this->platforms.at(2).platform.at(2).setFriction(1.0);
 }
 
 bool Game::isRunning() const
@@ -78,16 +78,23 @@ void Game::update()
 		for (auto& block : platformT.platform)
 		{
 			player->updateCollision(player->shape.getGlobalBounds(), block.shape.getGlobalBounds(), *player, player->shape);
-			for (auto& ball : balls)
+			int i = 0;
+			for (auto ball = balls.begin(); ball != balls.end(); ball++)
 			{
-				
-				ball.updateCollision(ball.shape.getGlobalBounds(), block.shape.getGlobalBounds(), ball, ball.shape);
+				ball->updateCollision(ball->shape.getGlobalBounds(), block.shape.getGlobalBounds(), *ball, ball->shape);
+				if ((fabs(ball->velocity.x) < ball->velocityMin) && (fabs(ball->velocity.y) < ball->velocityMin))
+				{
+					balls.erase(balls.begin() + i);
+					break;
+				}
+				i++;
+
 			}
 		}
 
 	}
 
-	this->player->update(this->window, *this->window);
+	this->player->update(this->window, *this->window, &ballTexture, &balls);
 
 }
 

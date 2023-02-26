@@ -15,7 +15,7 @@
 Body::Body()
 	: isRigid(false), gravityForce(0.0), mass(1.0), lossOfEnergy(1.0), friction(1.0), velocity(0.0, 0.0)
 {
-	this->velocityMin = 0.15;
+	this->velocityMin = 0.1;
 	this->isOnGround = false;
 
 }
@@ -29,7 +29,7 @@ Body::Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEner
 	this->friction = _friction;
 	this->velocity = Wektor{ _velocityX, _velocityY };
 
-	this->velocityMin = 0.1;
+	this->velocityMin = 0.15;
 	this->isOnGround = false;
 
 }
@@ -79,6 +79,7 @@ Body::~Body()
 				if (fabs(velocity.x) <= velocityMin)
 				{
 					velocity.x = 0;
+					//velocity.x = velocity.x * friction;
 				}
 				else
 					velocity.x = velocity.x * friction;
@@ -185,7 +186,7 @@ Body::~Body()
 	void Body::updateCollision(const sf::FloatRect& bodyBounds1, const sf::FloatRect& bodyBounds2, Body& body, sf::Sprite& shape)
 	{
 
-		if (bodyBounds2.intersects(body.nextPos))
+		if (((fabs(bodyBounds1.left - bodyBounds2.left) < 50.f) || (fabs(bodyBounds1.top - bodyBounds2.top) < 50.f))&& bodyBounds2.intersects(body.nextPos))
 		{
 			//body.rightColliding = false;
 			//body.leftColliding = false;
@@ -217,7 +218,8 @@ Body::~Body()
 				&& bodyBounds1.left + bodyBounds1.width > bodyBounds2.left) // Bottom collision
 			{
 				body.setIsOnGround(true);
-				body.setVelocity(Wektor{ body.getVelocity().x, 0 });
+				body.bottomCollision();
+				//body.setVelocity(Wektor{ body.getVelocity().x, 0 });
 				body.nextPos = shape.getGlobalBounds();
 				shape.setPosition(bodyBounds1.left, bodyBounds2.top - bodyBounds1.height);
 
@@ -261,8 +263,8 @@ Body::~Body()
 	void Body::updateNextPosition(sf::FloatRect currentPos)
 	{
 		this->nextPos = currentPos;
-		this->nextPos.left += velocity.x;
-		this->nextPos.top += velocity.y;
+		this->nextPos.left += static_cast<float>(velocity.x);
+		this->nextPos.top += static_cast<float>(velocity.y);
 	}
 
 // Setters

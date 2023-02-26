@@ -44,14 +44,14 @@ Wektor Wektor::operator-(Wektor const& w)
 //	return Wektor(y * w.z - z * w.y, z * w.x - x * w.z, x * w.y - y * w.x);
 //}
 
-double Wektor::dlugosc()
+double Wektor::length()
 {
 	return sqrt((*this) * (*this));
 }
 
-void Wektor::normoj()
+void Wektor::normalize()
 {
-	double d = this->dlugosc();
+	double d = this->length();
 	if (d)
 		(*this) = (*this) * (1 / d);
 }

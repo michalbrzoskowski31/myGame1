@@ -10,7 +10,8 @@ Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _grav
 	this->shape.setTexture(*playerTexture);
 	this->gun.setTexture(*gunTexture);
 	this->gun.setScale(0.25, 0.25);
-	this->gun.setOrigin(232, 0);
+	this->gun.setOrigin(232, 25); //232
+	this->ballVelocity = 10.0;
 	//this->initShape();
 }
 
@@ -57,14 +58,14 @@ void Player::initPhysicalParameters(bool _isRigid, double _gravityForce, double 
 
 // Public functions
 
-void Player::update(const sf::RenderTarget* target, const sf::Window& window)
+void Player::update(const sf::RenderTarget* target, const sf::Window& window, sf::Texture* ballTexture, std::vector<Ball>* balls)
 {
 
 	this->updateInput();
 	this->updatePhysics(this->shape);
 	this->setIsOnGround(false);
 	this->updateWindowBoundsCollision(target, this->shape);
-	this->updateGun(window, target);
+	this->updateGun(window, target, ballTexture, balls);
 	
 }
 
@@ -115,7 +116,7 @@ void Player::updateInput()
 	}
 }
 
-void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target)
+void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target, sf::Texture* ballTexture, std::vector<Ball>* balls)
 {
 	this->gun.setPosition(this->shape.getPosition().x, this->shape.getPosition().y);
 	this->mousePosition = sf::Mouse::getPosition(window);
@@ -139,11 +140,17 @@ void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target)
 		this->gun.setScale(0.25, 0.25);
 	}
 	this->gun.setRotation(b);
-	std::cout << b << "\n";
-
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	
+	static int shotDelay = 0;
+	shotDelay++;
+	if (shotDelay > 25 && sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		//balls.push_back(Ball{ shape.getPosition().x, shape.getPosition().y, 0.1, 10, 0.2, 0.2, &texture});
+		int correction = 180;
+		double velocityX = ballVelocity * cos((b + correction) * 3.141592653 / 180);
+		double velocityY = ballVelocity * sin((b + correction) * 3.141592653 / 180);
+		//std::cout << b + 270 << "   cos(b + 270) = " << cos(b + 270) <<  "   ==> x = " << ballVelocity * cos(b + 270) << "\n";
+		balls->push_back(Ball{this->shape.getPosition().x, this->shape.getPosition().y, 0.05, 10, 0.8, 0.999, velocityX, velocityY, ballTexture});
+		shotDelay = 0;
 	}
 }
 
