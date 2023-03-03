@@ -13,6 +13,7 @@
 #include "Block.h"
 #include "Platform.h"
 #include "Ball.h"
+#include "Enemy.h"
 //#include "Textures.h"
 
 class Game
@@ -33,12 +34,13 @@ public:
 		void update();
 		void render();
 
-		void updateCollision();
+		//void updateCollision();
 
 
 		//Platform* platform1_ptr;
 		std::vector<Platform> platforms;
 		std::vector<Ball> balls;
+		std::vector<Enemy> enemies;
 
 private:
 	sf::VideoMode videoMode;
@@ -53,6 +55,9 @@ private:
 	sf::Texture playerTexture;
 	sf::Texture ballTexture;
 	sf::Texture gunTexture;
+
+	sf::Texture enemy1Texture, enemy2Texture, enemy3Texture, enemy4Texture, enemy5Texture;
+	sf::Texture* enemiesTextures[5] = {&enemy1Texture, &enemy2Texture, &enemy3Texture, &enemy4Texture, &enemy5Texture};
 
 	sf::Sprite background_sprite;
 

@@ -6,7 +6,7 @@ Ball::Ball(float positionX, float positionY, double _gravityForce, double _mass,
 	//this->velocity = 7.5;
 	this->shape.setPosition(positionX, positionY);
 	this->shape.setTexture(*texture);
-	this->shape.setScale(0.8, 0.8);
+	this->shape.setScale(0.8f, 0.8f);
 
 }
 
@@ -17,7 +17,6 @@ Ball::~Ball()
 void Ball::update(const sf::RenderTarget* target)
 {
 	this->updatePhysics(this->shape);
-	//if (this->velocity.x != 0 && this->velocity.y != 0)
 	this->updateWindowBoundsCollision(target, this->shape);
 }
 

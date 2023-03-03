@@ -12,6 +12,9 @@ Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _grav
 	this->gun.setScale(0.25, 0.25);
 	this->gun.setOrigin(232, 25); //232
 	this->ballVelocity = 10.0;
+
+	this->HPMax = 5;
+	this->HP = this->HPMax;
 	//this->initShape();
 }
 
@@ -21,6 +24,9 @@ Player::Player(float x, float y)
 
 	this->initVariables();
 	//this->initShape();
+
+	this->HPMax = 5;
+	this->HP = this->HPMax;
 
 	this->setVelocity(Wektor(10.0, 10.0));
 }
@@ -129,27 +135,26 @@ void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target,
 	point2.x = (mousePosView.x - (window.getSize().x / 2));
 	point2.y = (window.getSize().y) / 2 - mousePosView.y;
 
-	float b = atan2f(point1.x - point2.x, point1.y - point2.y) * 180 / 3.141592653 -90;
+	double b = atan2f(point1.x - point2.x, point1.y - point2.y) * 180 / M_PI -90;
 	if (mousePosition.x > shape.getPosition().x)
 	{
 		this->gun.setScale(0.25, -0.25);
-		//this->gun.setRotation(b);
 	}
 	else
 	{
 		this->gun.setScale(0.25, 0.25);
 	}
-	this->gun.setRotation(b);
+	this->gun.setRotation(static_cast<float>(b));
 	
 	static int shotDelay = 0;
 	shotDelay++;
 	if (shotDelay > 25 && sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		int correction = 180;
-		double velocityX = ballVelocity * cos((b + correction) * 3.141592653 / 180);
-		double velocityY = ballVelocity * sin((b + correction) * 3.141592653 / 180);
+		double velocityX = ballVelocity * cos((b + correction) * M_PI / 180);
+		double velocityY = ballVelocity * sin((b + correction) * M_PI / 180);
 		//std::cout << b + 270 << "   cos(b + 270) = " << cos(b + 270) <<  "   ==> x = " << ballVelocity * cos(b + 270) << "\n";
-		balls->push_back(Ball{this->shape.getPosition().x, this->shape.getPosition().y, 0.05, 10, 0.8, 0.999, velocityX, velocityY, ballTexture});
+		balls->push_back(Ball{this->shape.getPosition().x, this->shape.getPosition().y, 0.05, 10, 0.3, 0.99, velocityX, velocityY, ballTexture});
 		shotDelay = 0;
 	}
 }
@@ -158,8 +163,6 @@ void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target,
 
 void Player::render(sf::RenderTarget* target)
 {
-
-
 	target->draw(this->shape);
 	target->draw(this->gun);
 }

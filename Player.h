@@ -1,5 +1,7 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <iostream>
 
@@ -37,8 +39,10 @@ public:
 
 	sf::Sprite shape;
 	sf::Sprite gun;
+	int HP;
 private:
 	//std::vector<Ball> balls;
+	int HPMax;
 	double ballVelocity;
 	sf::Vector2i mousePosition;
 	sf::Vector2f mousePosView;

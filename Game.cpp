@@ -35,6 +35,12 @@ void Game::loadTextures()
 	this->playerTexture.loadFromFile("Textures/player.png");
 	this->ballTexture.loadFromFile("Textures/ball.png");
 	this->gunTexture.loadFromFile("Textures/gun.png");
+
+	this->enemy1Texture.loadFromFile("Textures/enemyLevel1.png");
+	this->enemy2Texture.loadFromFile("Textures/enemyLevel2.png");
+	this->enemy3Texture.loadFromFile("Textures/enemyLevel3.png");
+	this->enemy4Texture.loadFromFile("Textures/enemyLevel4.png");
+	this->enemy5Texture.loadFromFile("Textures/enemyLevel5.png");
 }
 
 void Game::initStructures()
@@ -48,6 +54,8 @@ void Game::initStructures()
 	this->platforms.at(2).platform.at(2).setIsRigid(false);
 	this->platforms.at(2).platform.at(2).setLossOfEnergy(1.0);
 	this->platforms.at(2).platform.at(2).setFriction(1.0);
+
+	//this->enemies.push_back(Enemy{ 1000.f, 500.f, &enemy1Texture });
 }
 
 bool Game::isRunning() const
@@ -66,6 +74,47 @@ void Game::update()
 	/*
 	* Kolizja po prawej stronie gracza nie dzia³a
 	*/
+
+	static int emnemySpawnDelay = 0;
+	if (emnemySpawnDelay > 100 && enemies.size() < 3)
+	{
+		short enemyLevel = rand() % 5;
+		float enemySpawnOffset = 500;
+		float enemyPositionX = static_cast<float>(rand() % (static_cast<int>(sf::VideoMode::getDesktopMode().width + enemySpawnOffset)) - enemySpawnOffset);
+		this->enemies.push_back(Enemy{ enemyPositionX, -enemySpawnOffset, enemiesTextures[enemyLevel], enemyLevel});
+		//this->enemies.push_back(Enemy{ 1000.f, 500.f, &enemy3Texture, 3 });
+		emnemySpawnDelay = 0;
+	}
+	emnemySpawnDelay++;
+
+	int enemyNum = 0;
+
+	for (auto& enemy : enemies)
+	{
+		enemy.update(this->window, this->player->shape.getGlobalBounds());
+		int ballNum = 0;
+		for (auto& ball : balls)
+		{
+			if ((fabs(enemy.shape.getPosition().x + 25 - ball.shape.getPosition().x) < 40) && (fabs(enemy.shape.getPosition().y + 25 - ball.shape.getPosition().y) < 40))
+			{
+				
+				
+				balls.erase(balls.begin() + ballNum);
+				enemy.HP--;
+				if (enemy.HP <= 0)
+				{
+					enemies.erase(enemies.begin() + enemyNum);
+
+				}
+
+				//break;
+				
+			}
+			ballNum++;
+			
+		}
+		enemyNum++;
+	}
 	for (auto& ball : balls)
 	{
 		ball.update(this->window);
@@ -77,6 +126,10 @@ void Game::update()
 		platformT.update(this->window);
 		for (auto& block : platformT.platform)
 		{
+			for (auto& enemy : enemies)
+			{
+				enemy.updateCollision(enemy.shape.getGlobalBounds(), block.shape.getGlobalBounds(), enemy, enemy.shape);
+			}
 			player->updateCollision(player->shape.getGlobalBounds(), block.shape.getGlobalBounds(), *player, player->shape);
 			int i = 0;
 			for (auto ball = balls.begin(); ball != balls.end(); ball++)
@@ -98,19 +151,19 @@ void Game::update()
 
 }
 
-void Game::updateCollision()
-{
-	for (auto& platformT : platforms)
-	{
-		for (auto& block : platformT.platform)
-		{
-			if (block.shape.getGlobalBounds().intersects(player->shape.getGlobalBounds()))
-			{
-				std::cout << "COLLISION!\n";
-			}
-		}
-	}
-}
+//void Game::updateCollision()
+//{
+//	for (auto& platformT : platforms)
+//	{
+//		for (auto& block : platformT.platform)
+//		{
+//			if (block.shape.getGlobalBounds().intersects(player->shape.getGlobalBounds()))
+//			{
+//				std::cout << "COLLISION!\n";
+//			}
+//		}
+//	}
+//}
 
 void Game::render()
 {
@@ -120,6 +173,10 @@ void Game::render()
 
 	//this->block1.render(this->window);
 	//this->block1.setIsRigid(false);
+	for (auto& enemy : enemies)
+	{
+		enemy.render(this->window);
+	}
 	for (auto& ball : balls)
 	{
 		ball.render(this->window);
