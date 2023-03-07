@@ -8,7 +8,7 @@
 
 #include "Wektor.h"
 
-//#define DELTA_V(hold_v, current_v) current_v - hold_v
+#define DT_MULTIPLIER 164.7989453
 
 class Body
 {
@@ -23,15 +23,15 @@ public:
 	~Body();
 
 	// Update
-		void updatePhysics(sf::Sprite& target);
-		void updatePhysics(sf::Shape& target);
+		void updatePhysics(sf::Sprite& target, float deltaTime);
+		//void updatePhysics(sf::Shape& target);
 
-		void updateAcceleration();
+		void updateAcceleration(float deltaTime);
 		void updateForce();
 		void updateVelocity();
 
-		void updateMovement(sf::Sprite& target);
-		void updateMovement(sf::Shape& target);
+		void updateMovement(sf::Sprite& target, float deltaTime);
+		//void updateMovement(sf::Shape& target);
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape);
 		void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape);
 
@@ -88,6 +88,7 @@ public:
 	double lossOfEnergy;
 	double friction;
 	double velocityMin;
+	//float multiplier;
 
 	Wektor force;
 

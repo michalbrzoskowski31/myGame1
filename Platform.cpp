@@ -19,13 +19,13 @@ Platform::~Platform()
 	
 }
 
-void Platform::update(const sf::RenderTarget* target)
+void Platform::update(const sf::RenderTarget* target, float deltaTime)
 {
 	for (auto& block : platform)
 	{
 		//this->platform.at(i).updatePhysics(this->platform.at(i).shape);
 		//this->platform.at(i).updateWindowBoundsCollision(target, this->platform.at(i).shape);
-		block.updatePhysics(block.shape);
+		block.updatePhysics(block.shape, deltaTime);
 		block.updateWindowBoundsCollision(target, block.shape);
 	}
 }

@@ -20,7 +20,7 @@ public:
 	std::vector<Block> platform;
 	sf::Texture blockDefault;
 
-	void update(const sf::RenderTarget* target);
+	void update(const sf::RenderTarget* target, float deltaTime);
 	void render(sf::RenderTarget* target);
 	int grid = 50;
 };

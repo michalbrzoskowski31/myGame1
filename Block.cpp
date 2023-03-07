@@ -26,9 +26,9 @@ Block::~Block()
 
 }
 
-void Block::update(const sf::RenderTarget* target)
+void Block::update(const sf::RenderTarget* target, float deltaTime)
 {
-	this->updatePhysics(this->shape);
+	this->updatePhysics(this->shape, deltaTime);
 	this->updateWindowBoundsCollision(target, this->shape);
 }
 

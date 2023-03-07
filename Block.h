@@ -18,7 +18,7 @@ public:
 
 
 	//void initBlock();
-	void update(const sf::RenderTarget* target);
+	void update(const sf::RenderTarget* target, float deltaTime);
 	void render(sf::RenderTarget* target);
 	void initTexture();
 

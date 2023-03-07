@@ -14,9 +14,9 @@ Ball::~Ball()
 {
 }
 
-void Ball::update(const sf::RenderTarget* target)
+void Ball::update(const sf::RenderTarget* target, float deltaTime)
 {
-	this->updatePhysics(this->shape);
+	this->updatePhysics(this->shape, deltaTime);
 	this->updateWindowBoundsCollision(target, this->shape);
 }
 
@@ -25,14 +25,14 @@ void Ball::render(sf::RenderTarget* target)
 	target->draw(this->shape);
 }
 
-void Ball::updatePhysics(sf::Sprite& target)
+void Ball::updatePhysics(sf::Sprite& target, float deltaTime)
 {
 	if (!isRigid)
 	{
-		updateAcceleration();
+		updateAcceleration(deltaTime);
 		updateForce();
 		updateVelocity();
-		updateMovement(target);
+		updateMovement(target, deltaTime);
 		updateNextPosition(target.getGlobalBounds());
 
 		if (isOnGround)

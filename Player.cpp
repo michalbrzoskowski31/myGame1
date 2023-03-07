@@ -15,6 +15,8 @@ Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _grav
 
 	this->HPMax = 5;
 	this->HP = this->HPMax;
+	this->kills = 0;
+	this->totalShots = 0;
 	//this->initShape();
 }
 
@@ -27,6 +29,7 @@ Player::Player(float x, float y)
 
 	this->HPMax = 5;
 	this->HP = this->HPMax;
+	this->kills = 0;
 
 	this->setVelocity(Wektor(10.0, 10.0));
 }
@@ -36,6 +39,7 @@ Player::Player()
 {
 	this->shape.setPosition(0.f, 0.f);
 	this->initVariables();
+	this->kills = 0;
 	//this->initShape();
 }
 
@@ -64,14 +68,14 @@ void Player::initPhysicalParameters(bool _isRigid, double _gravityForce, double 
 
 // Public functions
 
-void Player::update(const sf::RenderTarget* target, const sf::Window& window, sf::Texture* ballTexture, std::vector<Ball>* balls)
+void Player::update(const sf::RenderTarget* target, const sf::Window& window, sf::Texture* ballTexture, std::vector<Ball>* balls, float deltaTime)
 {
 
 	this->updateInput();
-	this->updatePhysics(this->shape);
+	this->updatePhysics(this->shape, deltaTime);
 	this->setIsOnGround(false);
 	this->updateWindowBoundsCollision(target, this->shape);
-	this->updateGun(window, target, ballTexture, balls);
+	this->updateGun(window, target, ballTexture, balls, deltaTime);
 	
 }
 
@@ -122,7 +126,42 @@ void Player::updateInput()
 	}
 }
 
-void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target, sf::Texture* ballTexture, std::vector<Ball>* balls)
+void Player::updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape)
+{
+	// Left
+	//sf::FloatRect this->shape.getGlobalBounds() = this->shape.getGlobalBounds();
+
+	if (shape.getGlobalBounds().left <= 0.f)
+	{
+		shape.setPosition(0.f, shape.getGlobalBounds().top);
+		velocity.x = -velocity.x * lossOfEnergy;
+	}
+	// Right
+	if (shape.getGlobalBounds().left + shape.getGlobalBounds().width >= target->getSize().x)
+	{
+		shape.setPosition(target->getSize().x - shape.getGlobalBounds().width, shape.getGlobalBounds().top);
+		velocity.x = -velocity.x * lossOfEnergy;
+	}
+	// Top
+	if (shape.getGlobalBounds().top <= 0.f)
+	{
+		shape.setPosition(shape.getGlobalBounds().left, 0.f);
+		velocity.y = -velocity.y * lossOfEnergy;
+	}
+	// Bottom
+	if (shape.getGlobalBounds().top + shape.getGlobalBounds().height >= target->getSize().y)
+	{
+		shape.setPosition(shape.getGlobalBounds().left, target->getSize().y - shape.getGlobalBounds().height);
+		this->HP = 0;
+
+
+		//velocity.x = 0;
+		//velocity.y = 0;
+
+	}
+}
+
+void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target, sf::Texture* ballTexture, std::vector<Ball>* balls, float deltaTime)
 {
 	this->gun.setPosition(this->shape.getPosition().x, this->shape.getPosition().y);
 	this->mousePosition = sf::Mouse::getPosition(window);
@@ -135,6 +174,8 @@ void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target,
 	point2.x = (mousePosView.x - (window.getSize().x / 2));
 	point2.y = (window.getSize().y) / 2 - mousePosView.y;
 
+
+
 	double b = atan2f(point1.x - point2.x, point1.y - point2.y) * 180 / M_PI -90;
 	if (mousePosition.x > shape.getPosition().x)
 	{
@@ -146,17 +187,22 @@ void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target,
 	}
 	this->gun.setRotation(static_cast<float>(b));
 	
-	static int shotDelay = 0;
-	shotDelay++;
+	static double shotDelay = 0;
+
+	int spreadAngle = 5;
+	int spread = rand() % (2 * spreadAngle) - spreadAngle;
+
 	if (shotDelay > 25 && sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
+		this->totalShots++;
 		int correction = 180;
-		double velocityX = ballVelocity * cos((b + correction) * M_PI / 180);
-		double velocityY = ballVelocity * sin((b + correction) * M_PI / 180);
+		double velocityX = ballVelocity * cos((b + correction + spread) * M_PI / 180);
+		double velocityY = ballVelocity * sin((b + correction + spread) * M_PI / 180);
 		//std::cout << b + 270 << "   cos(b + 270) = " << cos(b + 270) <<  "   ==> x = " << ballVelocity * cos(b + 270) << "\n";
 		balls->push_back(Ball{this->shape.getPosition().x, this->shape.getPosition().y, 0.05, 10, 0.3, 0.99, velocityX, velocityY, ballTexture});
 		shotDelay = 0;
 	}
+	shotDelay += deltaTime * DT_MULTIPLIER;
 }
 
 

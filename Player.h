@@ -24,10 +24,11 @@ public:
 	virtual ~Player();
 
 	// Public functions
-	void update(const sf::RenderTarget* target, const sf::Window& window, sf::Texture* ballTexture, std::vector<Ball>* balls);
+	void update(const sf::RenderTarget* target, const sf::Window& window, sf::Texture* ballTexture, std::vector<Ball>* balls, float deltaTime);
 	void updateInput();
-	void updateGun(const sf::Window& window, const sf::RenderTarget* target, sf::Texture* ballTexture, std::vector<Ball>* balls);
+	void updateGun(const sf::Window& window, const sf::RenderTarget* target, sf::Texture* ballTexture, std::vector<Ball>* balls, float deltaTime);
 	void render(sf::RenderTarget* target);
+	void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape);
 
 	//void updateWindowBoundsCollision(const sf::RenderTarget* target);
 
@@ -40,8 +41,12 @@ public:
 	sf::Sprite shape;
 	sf::Sprite gun;
 	int HP;
+	int kills;
+	int totalShots;
 private:
 	//std::vector<Ball> balls;
+	//sf::Font font;
+	//sf::Text HPBar;
 	int HPMax;
 	double ballVelocity;
 	sf::Vector2i mousePosition;

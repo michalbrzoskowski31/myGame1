@@ -17,6 +17,7 @@ Body::Body()
 {
 	this->velocityMin = 0.1;
 	this->isOnGround = false;
+	//this->multiplier = 164.7989453f;
 
 }
 
@@ -28,6 +29,7 @@ Body::Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEner
 	this->lossOfEnergy = _lossOfEnergy;
 	this->friction = _friction;
 	this->velocity = Wektor{ _velocityX, _velocityY };
+	//this->multiplier = 130.f;
 
 	this->velocityMin = 0.15;
 	this->isOnGround = false;
@@ -39,14 +41,14 @@ Body::~Body()
 }
 
 // Update
-	void Body::updatePhysics(sf::Sprite& target)
+	void Body::updatePhysics(sf::Sprite& target, float deltaTime)
 	{
 		if (!isRigid)
 		{
-			updateAcceleration();
+			updateAcceleration(deltaTime);
 			updateForce();
 			updateVelocity();
-			updateMovement(target);
+			updateMovement(target, deltaTime);
 			updateNextPosition(target.getGlobalBounds());
 
 			if (isOnGround)
@@ -63,34 +65,34 @@ Body::~Body()
 
 	}
 
-	void Body::updatePhysics(sf::Shape& target)
+	//void Body::updatePhysics(sf::Shape& target)
+	//{
+	//	if (!isRigid)
+	//	{
+	//		updateAcceleration();
+	//		updateForce();
+	//		updateVelocity();
+	//		updateMovement(target);
+	//		updateNextPosition(target.getGlobalBounds());
+
+
+	//		if (isOnGround)
+	//		{
+	//			if (fabs(velocity.x) <= velocityMin)
+	//			{
+	//				velocity.x = 0;
+	//				//velocity.x = velocity.x * friction;
+	//			}
+	//			else
+	//				velocity.x = velocity.x * friction;
+
+	//		}
+	//	}
+	//}
+
+	void Body::updateAcceleration(float deltaTime)
 	{
-		if (!isRigid)
-		{
-			updateAcceleration();
-			updateForce();
-			updateVelocity();
-			updateMovement(target);
-			updateNextPosition(target.getGlobalBounds());
-
-
-			if (isOnGround)
-			{
-				if (fabs(velocity.x) <= velocityMin)
-				{
-					velocity.x = 0;
-					//velocity.x = velocity.x * friction;
-				}
-				else
-					velocity.x = velocity.x * friction;
-
-			}
-		}
-	}
-
-	void Body::updateAcceleration()
-	{
-		this->acceleration.y = this->gravityForce;
+		this->acceleration.y = this->gravityForce * deltaTime * DT_MULTIPLIER;
 		this->acceleration.x = 0;
 	}
 
@@ -103,15 +105,15 @@ Body::~Body()
 		this->velocity = this->velocity + this->acceleration;
 	}
 
-	void Body::updateMovement(sf::Sprite& target)
+	void Body::updateMovement(sf::Sprite& target, float deltaTime)
 	{
-		target.move(static_cast<float>(this->velocity.x), static_cast<float>(this->velocity.y));
+		target.move(static_cast<float>(this->velocity.x) * deltaTime * DT_MULTIPLIER, static_cast<float>(this->velocity.y) * deltaTime * DT_MULTIPLIER);
 	}
 
-	void Body::updateMovement(sf::Shape& target)
-	{
-		target.move(static_cast<float>(this->velocity.x), static_cast<float>(this->velocity.y));
-	}
+	//void Body::updateMovement(sf::Shape& target)
+	//{
+	//	target.move(static_cast<float>(this->velocity.x), static_cast<float>(this->velocity.y));
+	//}
 
 	void Body::updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape)
 	{

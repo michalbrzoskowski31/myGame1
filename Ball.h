@@ -15,9 +15,9 @@ public:
 	~Ball();
 
 	sf::Sprite shape;
-	void update(const sf::RenderTarget* target);
+	void update(const sf::RenderTarget* target, float deltaTime);
 	void render(sf::RenderTarget* target);
-	void updatePhysics(sf::Sprite& target);
+	void updatePhysics(sf::Sprite& target, float deltaTime);
 
 private:
 	//double velocity;
