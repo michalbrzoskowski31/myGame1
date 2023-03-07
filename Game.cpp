@@ -23,7 +23,7 @@ Game::~Game()
 void Game::initWindow()
 {
 	//sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height  <-- wymiary okna
-	this->videoMode = sf::VideoMode{ sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height };
+	this->videoMode = sf::VideoMode{ sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height }; //1920x1080
 	this->window = new sf::RenderWindow{ this->videoMode, "myGame1", sf::Style::Fullscreen };
 	this->window->setFramerateLimit(120);
 }
@@ -51,7 +51,6 @@ void Game::loadTextures()
 
 void Game::initStructures()
 {
-	//unsigned int grid = 50;
 	float wWidth = static_cast<float>(sf::VideoMode::getDesktopMode().width);
 	float wHeight = static_cast<float>(sf::VideoMode::getDesktopMode().height);
 
@@ -67,9 +66,10 @@ void Game::initStructures()
 
 	for (int i = 0; i < 5; i++)
 	{
+		float offset = 5;
 		this->HPBar.push_back(sf::Sprite{});
 		this->HPBar.at(i).setTexture(heartTexture);
-		this->HPBar.at(i).setPosition((wWidth - 5 * heartTexture.getSize().x) / 2 + i * (heartTexture.getSize().x), 0.f); // Dodaæ jakiœ offset
+		this->HPBar.at(i).setPosition((wWidth - 5 * heartTexture.getSize().x) / 2 + i * (heartTexture.getSize().x) + (i - 1) * offset, offset);
 	}
 
 	this->platforms.push_back(Platform{ 150.f, wHeight / 1.5f, 10, 1, &blockGrassTexture });
@@ -111,7 +111,7 @@ void Game::initText()
 	this->gameInfo.setFont(font2);
 	this->gameInfo.setCharacterSize(70);
 	this->gameInfo.setFillColor(sf::Color::Black);
-	this->gameInfo.setPosition(30.f, 30.f);
+	this->gameInfo.setPosition(25.f, 0.f);
 
 	// GAMEOVER
 	this->GAMEOVER.setFont(font1);
@@ -219,7 +219,6 @@ void Game::update()
 			float enemySpawnOffset = 500;
 			float enemyPositionX = static_cast<float>(rand() % (static_cast<int>(sf::VideoMode::getDesktopMode().width + enemySpawnOffset)) - enemySpawnOffset);
 			this->enemies.push_back(Enemy{ enemyPositionX, -enemySpawnOffset, enemiesTextures[enemyLevel], &font2, enemyLevel });
-			//this->enemies.push_back(Enemy{ 1000.f, 500.f, &enemy3Texture, 3 });
 			emnemySpawnDelay = 0;
 		}
 		emnemySpawnDelay += deltaTime * DT_MULTIPLIER;
@@ -235,7 +234,7 @@ void Game::update()
 			{
 				if ((fabs(enemy.shape.getPosition().x + 25 - ball.shape.getPosition().x) < 40) && (fabs(enemy.shape.getPosition().y + 25 - ball.shape.getPosition().y) < 40))
 				{
-					// enemy has been shot
+					// przeciwnik dosta³ kulkê
 					balls.erase(balls.begin() + ballNum);
 					enemy.HP--;
 					this->hitShots++;
@@ -272,7 +271,7 @@ void Game::update()
 					this->enemySpawnChance[3] += 20.f / 100.f;
 					this->enemySpawnChance[4] += 38.f / 100.f;
 				}
-				player->HP--; // Dodaæ jakiœ offset czasowy, bo gdy dotykam przeciwnika to ta p¹tle przelatuje têdy kilka razy
+				player->HP--;
 				this->HPBar.erase(HPBar.begin() + player->HP);
 				enemies.erase(enemies.begin() + enemyNum);
 			}
@@ -281,8 +280,6 @@ void Game::update()
 		for (auto& ball : balls)
 		{
 			ball.update(this->window, deltaTime);
-			//ball.updateCollision(ball.shape.getGlobalBounds(), )
-			//ball.setVelocity(Wektor{ 5.0, 5.0 });
 		}
 		for (auto& platformT : platforms)
 		{
@@ -326,7 +323,7 @@ void Game::update()
 		{
 			GAMEOVER.setFillColor(sf::Color::Transparent);
 		}
-		if (gameoverTimer >= 2 * time)
+		if (gameoverTimer >= 2.0 * static_cast<double>(time))
 		{
 
 			gameoverTimer = 0;
@@ -339,19 +336,6 @@ void Game::update()
 
 }
 
-//void Game::updateCollision()
-//{
-//	for (auto& platformT : platforms)
-//	{
-//		for (auto& block : platformT.platform)
-//		{
-//			if (block.shape.getGlobalBounds().intersects(player->shape.getGlobalBounds()))
-//			{
-//				std::cout << "COLLISION!\n";
-//			}
-//		}
-//	}
-//}
 
 void Game::render()
 {
@@ -359,8 +343,6 @@ void Game::render()
 	this->window->draw(background_sprite);
 
 
-	//this->block1.render(this->window);
-	//this->block1.setIsRigid(false);
 	for (auto& enemy : enemies)
 	{
 		enemy.render(this->window);
@@ -395,8 +377,10 @@ void Game::render()
 	{
 		this->scoreTxt.setString("Score: " + std::to_string(player->kills));
 		this->bestScoreTxt.setString("Best score: " + std::to_string(bestScore));
-		if(player->totalShots != 0)
+		if (player->totalShots != 0)
 			this->accuracyTxt.setString("Accuracy: " + std::to_string(static_cast<int>(hitShots * 100.f / player->totalShots)) + "%");
+		else
+			this->accuracyTxt.setString("Accuracy: 0%");
 
 		this->window->draw(GAMEOVER);
 		this->window->draw(scoreTxt);

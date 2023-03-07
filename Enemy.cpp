@@ -6,7 +6,6 @@ Enemy::Enemy(sf::Font* font)
 	this->HP = this->HPMax;
 	this->speed = 1.f;
 
-	//this->font = new sf::Font{ *font };
 	this->HPTxt.setFont(*font);
 	this->HPTxt.setCharacterSize(30);
 	this->HPTxt.setFillColor(sf::Color::Black);
@@ -53,7 +52,6 @@ Enemy::Enemy(float positionX, float positionY, sf::Texture* texture, sf::Font* f
 		break;
 	}
 
-	//this->font = new sf::Font{*font};
 	this->HPTxt.setFont(*font);
 	this->HPTxt.setCharacterSize(30);
 	this->HPTxt.setFillColor(sf::Color::Black);
@@ -62,7 +60,7 @@ Enemy::Enemy(float positionX, float positionY, sf::Texture* texture, sf::Font* f
 
 Enemy::~Enemy()
 {
-	//delete this->font;
+
 }
 
 void Enemy::update(const sf::RenderTarget* target, const sf::FloatRect playerBounds, float deltaTime)
@@ -79,21 +77,21 @@ void Enemy::render(sf::RenderTarget* target)
 {
 	target->draw(this->shape);
 	target->draw(this->HPTxt);
-	//target->draw(this->HPBar.at(0));
+
 }
 
 void Enemy::calculateMovement(const sf::FloatRect playerBounds, float deltaTime)
 {
 	sf::FloatRect enemyBounds = this->shape.getGlobalBounds();
 
-	double b = atan2f(playerBounds.top - enemyBounds.top, playerBounds.left - enemyBounds.left) * 180 / M_PI;
-	//int multiplier = 164.7989453;
+	double b = atan2f(playerBounds.top - enemyBounds.top, playerBounds.left - enemyBounds.left) * 180.f / static_cast<float>(M_PI);
 
-	float movementX = static_cast<float>(this->speed * cos(b * M_PI / 180)); // multiplier * deltaTime *  
+
+	float movementX = static_cast<float>(this->speed * cos(b * M_PI / 180));
 	float movementY = static_cast<float>(this->speed * sin(b * M_PI / 180));
-	std::cout << deltaTime << "\n";
+	//std::cout << deltaTime << "\n";
 
-	//this->shape.move(movementX, movementY);
+
 	this->setVelocity(Wektor{ movementX, movementY });
 }
 

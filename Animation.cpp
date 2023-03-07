@@ -8,8 +8,8 @@ Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switch
 	this->totalTime = 0.f;
 	this->currentImage.x = 0;
 
-	this->uvRect.width = texture->getSize().x / static_cast<float>(imageCount.x);
-	this->uvRect.height = texture->getSize().y / static_cast<float>(imageCount.y);
+	this->uvRect.width = static_cast<int>(texture->getSize().x / static_cast<float>(imageCount.x));
+	this->uvRect.height = static_cast<int>(texture->getSize().y / static_cast<float>(imageCount.y));
 
 
 }

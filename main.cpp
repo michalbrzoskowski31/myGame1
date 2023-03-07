@@ -16,8 +16,6 @@ int main()
     srand(static_cast<unsigned>(time(NULL)));
     std::fstream dataFileW;
     std::istringstream dataFileR;
-    //dataFile.open("data.txt");
-
 
 
     Game game;
@@ -38,9 +36,13 @@ int main()
         game.render();
     }
 
-    dataFileW.open("dataFile.txt");
-    dataFileW << game.getKills();
-    dataFileW.close();
+    if (game.getKills() > game.getBestScore())
+    {
+        dataFileW.open("dataFile.txt");
+        dataFileW << game.getKills();
+        dataFileW.close();
+    }
+
 
 	return 0;
 }

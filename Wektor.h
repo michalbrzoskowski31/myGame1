@@ -16,11 +16,7 @@ public:
 	Wektor operator*(double liczba);
 	Wektor operator+(Wektor const& w);
 	Wektor operator-(Wektor const& w);
-	//Wektor operator%(Wektor const& w);
 
-
-	double length();
-	void normalize();
 };
 
 Wektor operator*(double s, Wektor const& w);

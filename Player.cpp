@@ -1,7 +1,7 @@
 #include "Player.h"
 
 //Constructors & Destructors
-Player::Player(float posX/*position X*/, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY, sf::Texture* playerTexture, sf::Texture* gunTexture)
+Player::Player(float posX, float posY, bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY, sf::Texture* playerTexture, sf::Texture* gunTexture)
 	: Body(_isRigid, _gravityForce, _mass, _lossOfEnergy, _friction, _velocityX, _velocityY)
 {
 	
@@ -81,43 +81,27 @@ void Player::update(const sf::RenderTarget* target, const sf::Window& window, sf
 
 void Player::updateInput()
 {
-	bool PressedW = false;
-	bool PressedS = false;
-	bool PressedA = false;
-	bool PressedD = false;
-
-
 	// Keyboard input
 	// Left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		if (1)
-		{
-			PressedA = true;
-			this->velocity.x = -movementSpeed;
-			//this->setVelocity(Wektor{ -movementSpeed, 0.0 });
-		}
+		this->velocity.x = -movementSpeed;
 	}
 	// Right
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		if (1)
-		{
-			PressedD = true;
-			this->velocity.x = movementSpeed;
-		}
+		this->velocity.x = movementSpeed;
 	}
 	// Up
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		this->velocity.y = -movementSpeed;
+		//this->velocity.y = -movementSpeed;
 	}
 	// Down
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		if (!PressedS)
-			//if (!isOnGround)
-				this->velocity.y = movementSpeed;
+		//if (!isOnGround)
+		//	this->velocity.y += movementSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
@@ -171,12 +155,12 @@ void Player::updateGun(const sf::Window& window, const sf::RenderTarget* target,
 	point1.y = (window.getSize().y) / 2 - shape.getPosition().y;
 
 	sf::Vector2f point2;
-	point2.x = (mousePosView.x - (window.getSize().x / 2));
-	point2.y = (window.getSize().y) / 2 - mousePosView.y;
+	point2.x = static_cast<float>((mousePosView.x - (window.getSize().x / 2)));
+	point2.y = static_cast<float>((window.getSize().y) / 2 - mousePosView.y);
 
 
 
-	double b = atan2f(point1.x - point2.x, point1.y - point2.y) * 180 / M_PI -90;
+	double b = atan2f(point1.x - point2.x, point1.y - point2.y) * 180.0 / M_PI - 90.0;
 	if (mousePosition.x > shape.getPosition().x)
 	{
 		this->gun.setScale(0.25, -0.25);
@@ -212,23 +196,3 @@ void Player::render(sf::RenderTarget* target)
 	target->draw(this->shape);
 	target->draw(this->gun);
 }
-
-//double Player::getAcceleration(short xy) const
-//{
-//	return xy == 0 ? this->acceleration.x : this->acceleration.y;
-//}
-//
-//double Player::getVelocity(short xy) const
-//{
-//	return xy == 0 ? this->velocity.x : this->velocity.y;
-//}
-//
-//double Player::getForce(short xy) const
-//{
-//	return xy == 0 ? this->force.x : this->force.y;
-//}
-//
-//double Player::getMovement(short xy) const
-//{
-//	return xy == 0 ? this->movement.x : this->movement.y;
-//}

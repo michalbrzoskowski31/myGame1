@@ -1,10 +1,7 @@
 #pragma once
 
-#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 
 #include "Wektor.h"
 
@@ -16,8 +13,6 @@ public:
 
 	// constructors & destructors
 	Body();
-	//Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY)
-	//	: isRigid(_isRigid), gravityForce(_gravityForce), mass(_mass), lossOfEnergy(_lossOfEnergy), friction(_friction), velocity(_velocityX, _velocityY);
 	
 	Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY);
 	~Body();
@@ -74,10 +69,6 @@ public:
 
 //private:
 
-	enum coordinates {
-		X = 0,
-		Y,
-	};
 
 	sf::FloatRect nextPos;
 

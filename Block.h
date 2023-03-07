@@ -1,10 +1,6 @@
 #pragma once
 
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 
 #include "Body.h"
 
@@ -17,10 +13,9 @@ public:
 	~Block();
 
 
-	//void initBlock();
 	void update(const sf::RenderTarget* target, float deltaTime);
 	void render(sf::RenderTarget* target);
-	void initTexture();
+
 
 	sf::Sprite shape;
 	sf::Texture textureDefault;

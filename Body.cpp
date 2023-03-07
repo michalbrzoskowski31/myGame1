@@ -1,24 +1,11 @@
 #include "Body.h"
 
 
-//Body::Body()
-//{
-//	this->lossOfEnergy = 0.0;
-//	this->friction = 0.0;
-//	this->mass = 0.0;
-//	this->velocityMin = 0.15;
-//	this->isRigid = false;
-//	this->isOnGround = false;
-//	this->gravityForce = 0.0;
-//}
-
 Body::Body()
 	: isRigid(false), gravityForce(0.0), mass(1.0), lossOfEnergy(1.0), friction(1.0), velocity(0.0, 0.0)
 {
 	this->velocityMin = 0.1;
 	this->isOnGround = false;
-	//this->multiplier = 164.7989453f;
-
 }
 
 Body::Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEnergy, double _friction, double _velocityX, double _velocityY)
@@ -29,7 +16,6 @@ Body::Body(bool _isRigid, double _gravityForce, double _mass, double _lossOfEner
 	this->lossOfEnergy = _lossOfEnergy;
 	this->friction = _friction;
 	this->velocity = Wektor{ _velocityX, _velocityY };
-	//this->multiplier = 130.f;
 
 	this->velocityMin = 0.15;
 	this->isOnGround = false;
@@ -74,8 +60,6 @@ Body::~Body()
 	//		updateVelocity();
 	//		updateMovement(target);
 	//		updateNextPosition(target.getGlobalBounds());
-
-
 	//		if (isOnGround)
 	//		{
 	//			if (fabs(velocity.x) <= velocityMin)
@@ -85,7 +69,6 @@ Body::~Body()
 	//			}
 	//			else
 	//				velocity.x = velocity.x * friction;
-
 	//		}
 	//	}
 	//}
@@ -107,7 +90,7 @@ Body::~Body()
 
 	void Body::updateMovement(sf::Sprite& target, float deltaTime)
 	{
-		target.move(static_cast<float>(this->velocity.x) * deltaTime * DT_MULTIPLIER, static_cast<float>(this->velocity.y) * deltaTime * DT_MULTIPLIER);
+		target.move(static_cast<float>(this->velocity.x) * deltaTime * static_cast<float>(DT_MULTIPLIER), static_cast<float>(this->velocity.y) * deltaTime * static_cast<float>(DT_MULTIPLIER));
 	}
 
 	//void Body::updateMovement(sf::Shape& target)
@@ -153,7 +136,7 @@ Body::~Body()
 	void Body::updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Shape& shape)
 	{
 		// Left
-//sf::FloatRect this->shape.getGlobalBounds() = this->shape.getGlobalBounds();
+		//sf::FloatRect this->shape.getGlobalBounds() = this->shape.getGlobalBounds();
 
 		if (shape.getGlobalBounds().left <= 0.f)
 		{
@@ -190,15 +173,11 @@ Body::~Body()
 
 		if (((fabs(bodyBounds1.left - bodyBounds2.left) < 50.f) || (fabs(bodyBounds1.top - bodyBounds2.top) < 50.f))&& bodyBounds2.intersects(body.nextPos))
 		{
-			//body.rightColliding = false;
-			//body.leftColliding = false;
-			//std::cout << "COLLISION!\n";
 			if (bodyBounds1.left < bodyBounds2.left
 				&& bodyBounds1.left + bodyBounds1.width < bodyBounds2.left + bodyBounds2.width
 				&& bodyBounds1.top < bodyBounds2.top + bodyBounds2.height
 				&& bodyBounds1.top + bodyBounds1.height > bodyBounds2.top) // Right collision
 			{
-				//body.setMovement(Wektor{ 0, body.getVelocity().y });
 				shape.setPosition(bodyBounds2.left - bodyBounds1.width, bodyBounds1.top);
 				rightCollision();
 				body.nextPos = shape.getGlobalBounds();
@@ -209,7 +188,6 @@ Body::~Body()
 				&& bodyBounds1.top < bodyBounds2.top + bodyBounds2.height
 				&& bodyBounds1.top + bodyBounds1.height > bodyBounds2.top) // Left collision
 			{
-				//body.setVelocity(Wektor{ 0, body.getVelocity().y });
 				shape.setPosition(bodyBounds2.left + bodyBounds2.width, bodyBounds1.top);
 				leftCollision();
 				body.nextPos = shape.getGlobalBounds();
@@ -221,7 +199,6 @@ Body::~Body()
 			{
 				body.setIsOnGround(true);
 				body.bottomCollision();
-				//body.setVelocity(Wektor{ body.getVelocity().x, 0 });
 				body.nextPos = shape.getGlobalBounds();
 				shape.setPosition(bodyBounds1.left, bodyBounds2.top - bodyBounds1.height);
 

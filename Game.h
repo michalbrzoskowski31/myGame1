@@ -7,11 +7,8 @@
 #include <string>
 #include <cmath>
 
-#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 
 #include "Player.h"
 #include "Block.h"
@@ -19,7 +16,6 @@
 #include "Ball.h"
 #include "Enemy.h"
 #include "Animation.h"
-//#include "Textures.h"
 
 #define GRID 50
 

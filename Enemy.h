@@ -3,14 +3,9 @@
 #define _USE_MATH_DEFINES
 
 #include <cmath>
-#include <iostream>
 #include <vector>
 
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 
 #include "Body.h"
 
@@ -29,13 +24,10 @@ public:
 	sf::Sprite shape;
 	int HP;
 private:
-	//sf::Font* font;
+
 	sf::Text HPTxt;
 	int HPMax;
 	float speed;
 
-	//sf::Texture* heartTexture;
-	//std::vector<sf::Sprite> HPBar;
-	//sf::FloatRect thisBounds;
 };
 

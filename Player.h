@@ -8,8 +8,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 
 #include "Body.h"
 #include "Ball.h"
@@ -30,23 +28,13 @@ public:
 	void render(sf::RenderTarget* target);
 	void updateWindowBoundsCollision(const sf::RenderTarget* target, sf::Sprite& shape);
 
-	//void updateWindowBoundsCollision(const sf::RenderTarget* target);
-
-	// Getters
-	//double getVelocity(short xy) const;
-	//double getAcceleration(short xy) const;
-	//double getMovement(short xy) const;
-	//double getForce(short xy) const;
-
 	sf::Sprite shape;
 	sf::Sprite gun;
 	int HP;
 	int kills;
 	int totalShots;
 private:
-	//std::vector<Ball> balls;
-	//sf::Font font;
-	//sf::Text HPBar;
+
 	int HPMax;
 	double ballVelocity;
 	sf::Vector2i mousePosition;
