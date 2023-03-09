@@ -380,7 +380,7 @@ void Game::render()
 		if (player->totalShots != 0)
 			this->accuracyTxt.setString("Accuracy: " + std::to_string(static_cast<int>(hitShots * 100.f / player->totalShots)) + "%");
 		else
-			this->accuracyTxt.setString("Accuracy: 0%");
+			this->accuracyTxt.setString("Accuracy: --");
 
 		this->window->draw(GAMEOVER);
 		this->window->draw(scoreTxt);
